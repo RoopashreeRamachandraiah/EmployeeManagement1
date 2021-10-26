@@ -28,7 +28,7 @@ class EmployeeInformation extends Component {
                                 <form>
                                     <div className={"form-group"}>
                                         <label className={"col-sm-3 remove-left"}> Firstname: </label> 
-										<label className={"col-sm-3 remove-left"}> {employee.firstName}
+										<label className={"col-sm-3 remove-left"}> employee.firstName
 										</label> 
 										
                                     </div>
