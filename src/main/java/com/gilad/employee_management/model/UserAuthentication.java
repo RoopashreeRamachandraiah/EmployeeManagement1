@@ -1,9 +1,11 @@
 package com.gilad.employee_management.model;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
 
 @Entity
 public class UserAuthentication {
+	@Id
 	private String email;
 	private String password;
 	private String role;
