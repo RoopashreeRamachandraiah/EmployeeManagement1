@@ -17,6 +17,11 @@ public class Employee {
     private String lastName;
     @Email(message = "Email should be valid")
     private String email;
+    private String phone;
+    private String supervisor;
+    
+    private Address address;
+    
 
     public Employee() {
     }
@@ -58,6 +63,30 @@ public class Employee {
     public void setEmail(String email) {
         this.email = email;
     }
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getSupervisor() {
+		return supervisor;
+	}
+
+	public void setSupervisor(String supervisor) {
+		this.supervisor = supervisor;
+	}
+
+	public Address getAddress() {
+		return address;
+	}
+
+	public void setAddress(Address address) {
+		this.address = address;
+	}
 
 
 }
