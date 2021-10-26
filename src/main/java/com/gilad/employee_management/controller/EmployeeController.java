@@ -3,12 +3,12 @@ package com.gilad.employee_management.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,31 +31,28 @@ public class EmployeeController {
     @Autowired
     private EmployeeRepository employeeRepository;
     
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
 
     @GetMapping("/employees")
-    public List<Map<String, Object>> getAllEmployees() {
-    	String query = "select * from employee_details";
-    	List<Map<String, Object>> employeeList = jdbcTemplate.queryForList(query);
-    	System.out.println(employeeList.size());
-    	return employeeList;
+    public List<Employee> getAllEmployees() {
+		return employeeRepository.findAll();
+    }
+    @GetMapping("/employees/{empId}")
+    public Optional<Employee> getAllEmployees(@PathVariable Long empId) {
+		return employeeRepository.findById(empId);
     }
 
     @PostMapping("/employees")
-    public void createEmployee(@Valid @RequestBody Employee employee) {
-//        return ResponseEntity.ok(employeeRepository.save(employeeRepository.save(employee)));
-    	String query = " insert into employee_details (id, first_name) values (+3,"+ employee.getFirstName() +") ";
-    	jdbcTemplate.execute(query);
-    	//Map<String, Object> employee1 = jdbcTemplate.queryForList(query).size() > 0  ? jdbcTemplate.queryForMap(query) : null;
-        //return employee;
+    public ResponseEntity<@Valid Employee> createEmployee(@Valid @RequestBody Employee employee) {
+    return ResponseEntity.ok(employeeRepository.save(employeeRepository.save(employee)));
     }
 
     @GetMapping("/employees/{emailId}")
-    public Map<String, Object> getEmployeeById(@PathVariable String emailId) {
-    	String query = "select * from employee_details where email_id = ? ";
+    public String getEmployeePassword(@PathVariable String emailId) {
+		return null;
+    	//employeeRepository.findById(emailId);
+    	/*String query = "select * from employee_details where email_id = ? ";
     	Map<String, Object> employee = jdbcTemplate.queryForList(query, emailId).size() > 0  ? jdbcTemplate.queryForMap(query, emailId) : null;
-        return employee;
+        return employee;*/
     }
 
     @PutMapping("/employees/{id}")
