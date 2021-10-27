@@ -1,33 +1,72 @@
 import React, {Component} from 'react';
 import EmployeeService from "../services/EmployeeService";
 
-class EmployeeInformation extends Component {
+class EmployeeInformationAdmin extends Component {
     constructor(props) {
         super(props);
-		 this.state={
+
+        this.state={
             id: this.props.match.params.id, // get the id param from the rout (from URL path)
             firstName:'',
             lastName:'',
-            email:''
+            role:'',
+            contact:'',
+            email:'',
+            password:''
         };
+
+        this.changeContactHandler=this.changeContactHandler.bind(this)
+        this.changeEmailHandler=this.changeEmailHandler.bind(this)
+        this.changeRoleHandler=this.changeRoleHandler.bind(this)
+        this.saveOrUpdateEmployee=this.saveOrUpdateEmployee.bind(this)
     }
-     componentDidMount() {
+
+    componentDidMount() {
+	console.log(`inside component mount ${this.state.id}`)
         EmployeeService.getEmployeeById(this.state.id).then(res=>{
             let employee = res.data;
             this.setState({firstName: employee.firstName, lastName:employee.lastName, email:employee.email});
-        }) }
+        })
+    }
 
-    logOff(id){
-		this.props.history.push("/");
-	}
-       
+  
+    changeEmailHandler(event) {
+    this.setState({email:event.target.value})
+    }
+
+    changeContactHandler(event) {
+    this.setState({contact:event.target.value})
+    }
+
+  
+    changeRoleHandler(event) {
+    this.setState({role:event.target.value})
+    }
+
+    saveOrUpdateEmployee(event){
+        event.preventDefault();
+        let employee= {firstName:this.state.firstName, lastName:this.state.lastName, contact:this.state.contact, email:this.state.email,
+                       password:this.state.password  }
+        console.log("employee: " + JSON.stringify(employee));
+		console.log(this.state.id);
+		        EmployeeService.updateEmployee(this.state.id,employee).then((res)=>{
+                this.props.history.push("/admin");}
+            );
+        }
+
+    
+
+    cancel(){
+        this.props.history.push("/admin");
+    }
+
     render() {
         return (
             <div>
                 <div className={"container mt-3"}>
                     <div className={"row "}>
                         <div className={"card col-md-6 offset-md-3 offset-md-3"}>
-                            <h3 className={"text-center"}>Employee Information</h3>
+                            <h3 className={"text-center"}>{"Update Employee Details"}</h3>
                             <div className={"card-body"}>
                                 <form>
                                     <div className={"form-group"}>
@@ -55,15 +94,18 @@ class EmployeeInformation extends Component {
                                         <input className={"form-control"} placeholder={"Email"} name={"email"}
                                                value={this.state.email} onChange={this.changeEmailHandler}/>
                                     </div>
-                                 <button className={"btn btn-info"} onClick={() => this.logOff()}>LOGOFF</button>
-                                 </form>
+                                    <button className={"btn btn-success"} onClick={this.saveOrUpdateEmployee}>Apply</button>
+                                    <button className={"btn btn-danger ml-2"} onClick={this.cancel.bind(this)}>Cancel</button>
+                                </form>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>	
         );
     }
 }
 
-export default EmployeeInformation;
+
+ 
+export default EmployeeInformationAdmin;
