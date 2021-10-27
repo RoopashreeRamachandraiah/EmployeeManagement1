@@ -22,7 +22,7 @@ class LoginComponent extends Component {
 					if (employee.role === "admin") {
 						this.props.history.push("/admin");
 					} else if (employee.role === "employee") {
-						this.props.history.push("/view-employee");
+						this.props.history.push("/view-employee-information");
 					}
 				}
 			});

@@ -23,7 +23,7 @@ class ListEmployeesComponent extends Component {
     }
 
     updateEmployee(id) {
-        this.props.history.push(`/add-employee/${id}`);
+        this.props.history.push(`/view-employee/${id}`);
     }
 
     deleteEmployee(id){
@@ -33,9 +33,11 @@ class ListEmployeesComponent extends Component {
     }
 
 	viewEmployee(id){
-		this.props.history.push("/view-employee");
+		this.props.history.push("/view-employee/${id}");
 	}
-
+    logOff(id){
+		this.props.history.push("/");
+	}
     render() {
         return (
             <div>
@@ -65,10 +67,9 @@ class ListEmployeesComponent extends Component {
                                     <td>{employee.last_name}</td>
                                     <td>{employee.email_id}</td>
                                     <td>
-                                        <button className={"btn btn-info"} onClick={() => this.updateEmployee(employee.id)}>Update</button>
+                                        <button className={"btn btn-info"} onClick={() => this.updateEmployee(employee.id)}>Update/View details</button>
                                         <button className={"btn btn-danger ml-2"} onClick={() => this.deleteEmployee(employee.id)}>Delete</button>
-										<button className={"btn btn-info"} onClick={() => this.viewEmployee(employee.id)}>View details</button>
-
+										
                                     </td>
 
                                 </tr>
@@ -77,7 +78,7 @@ class ListEmployeesComponent extends Component {
 
                         </tbody>
                     </table>
-
+                   <button className={"btn btn-info"} onClick={() => this.logOff()}>LOGOFF</button>
 
                 </div>
             </div>

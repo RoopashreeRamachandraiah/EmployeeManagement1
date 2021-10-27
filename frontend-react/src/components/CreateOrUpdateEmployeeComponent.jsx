@@ -9,12 +9,18 @@ class CreateOrUpdateEmployeeComponent extends Component {
             id: this.props.match.params.id, // get the id param from the rout (from URL path)
             firstName:'',
             lastName:'',
-            email:''
+            role:'',
+            contact:'',
+            email:'',
+            password:''
         };
 
         this.changeFirstNameHandler=this.changeFirstNameHandler.bind(this)
         this.changeLastNameHandler=this.changeLastNameHandler.bind(this)
+        this.changeContactHandler=this.changeContactHandler.bind(this)
         this.changeEmailHandler=this.changeEmailHandler.bind(this)
+        this.changePasswordHandler=this.changePasswordHandler.bind(this)
+        this.changeRoleHandler=this.changeRoleHandler.bind(this)
         this.saveOrUpdateEmployee=this.saveOrUpdateEmployee.bind(this)
     }
 
@@ -38,30 +44,43 @@ class CreateOrUpdateEmployeeComponent extends Component {
     this.setState({email:event.target.value})
     }
 
+    changeContactHandler(event) {
+    this.setState({contact:event.target.value})
+    }
+
+    changePasswordHandler(event) {
+    this.setState({password:event.target.value})
+    }
+
+    changeRoleHandler(event) {
+    this.setState({role:event.target.value})
+    }
+
     saveOrUpdateEmployee(event){
         event.preventDefault();
-        let employee= {firstName:this.state.firstName, lastName:this.state.lastName, email:this.state.email}
+        let employee= {firstName:this.state.firstName, lastName:this.state.lastName, contact:this.state.contact, email:this.state.email,
+                       password:this.state.password  }
         console.log("employee: " + JSON.stringify(employee));
 		console.log(this.state.id);
-        if (this.state.id === '_add') {
+		        if (this.props.history.location.pathname === '/add-employee/_add') {
 			console.log("add employee");
             EmployeeService.createEmployee(employee).then(res=>{
-                this.props.history.push("/employees");}
+                this.props.history.push("/admin");}
             );
         }else{
             EmployeeService.updateEmployee(this.state.id,employee).then((res)=>{
-                this.props.history.push("/employees");}
+                this.props.history.push("/admin");}
             );
         }
 
     }
 
     cancel(){
-        this.props.history.push("/employees");
+        this.props.history.push("/admin");
     }
 
     getTitle(){
-        return this.state.id === '_add' ? "Add Employee" : "Update Employee";
+        return this.props.history.location.pathname === '/add-employee/_add' ? "Add Employee" : "Update Employee";
     }
 
     render() {
@@ -84,9 +103,24 @@ class CreateOrUpdateEmployeeComponent extends Component {
                                                value={this.state.lastName} onChange={this.changeLastNameHandler}/>
                                     </div>
                                     <div className={"form-group"}>
+                                        <label> Contact:  </label>
+                                        <input className={"form-control"} placeholder={"Contact"} name={"contact"}
+                                               value={this.state.contact} onChange={this.changeContactHandler}/>
+                                    </div>
+                                    <div className={"form-group"}>
+                                        <label> Role:  </label>
+                                        <input className={"form-control"} placeholder={"Role"} name={"role"}
+                                               value={this.state.role} onChange={this.changeRoleHandler}/>
+                                    </div>
+                                    <div className={"form-group"}>
                                         <label> Email: </label>
-                                        <input className={"form-control"} placeholder={"Email"} name={"Email"}
+                                        <input className={"form-control"} placeholder={"Email"} name={"email"}
                                                value={this.state.email} onChange={this.changeEmailHandler}/>
+                                    </div>
+                                     <div className={"form-group"}>
+                                        <label> Password: </label>
+                                        <input type="password"className={"form-control"} placeholder={"Password"} name={"password"}
+                                               value={this.state.password} onChange={this.changePasswordHandler}/>
                                     </div>
                                     <button className={"btn btn-success"} onClick={this.saveOrUpdateEmployee}>Apply</button>
                                     <button className={"btn btn-danger ml-2"} onClick={this.cancel.bind(this)}>Cancel</button>
