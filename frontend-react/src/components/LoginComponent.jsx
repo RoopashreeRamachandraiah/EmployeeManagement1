@@ -14,17 +14,15 @@ class LoginComponent extends Component {
 	login = (event) => {
 		event.preventDefault();
 		if (this.state.userName.trim() !== "" && this.state.password.trim() !== "") {
-			EmployeeService.getEmployeeById(this.state.userName, this.state.password).then(res => {
+			EmployeeService.getEmployeeAuth(this.state.userName).then(res => {
 				let employee = JSON.parse(JSON.stringify(res.data));
 				if (Object.keys(res.data).length === 0 || employee.password !== this.state.password) {
 					this.setState({ message: "Invalid Credentials !!" });
-				} else {
-					if (employee.role === "admin") {
+				} else if (employee.role === "admin") {
 						this.props.history.push("/admin");
 					} else if (employee.role === "employee") {
-						this.props.history.push("/view-employee-information");
+						this.props.history.push(`/view-employee-information/${employee.email}`);
 					}
-				}
 			});
 		} else {
 			this.setState({ message: "Username/Password cannot be blank!!" });

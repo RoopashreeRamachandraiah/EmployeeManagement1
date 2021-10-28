@@ -25,7 +25,7 @@ import com.gilad.employee_management.model.UserAuthentication;
 import com.gilad.employee_management.repository.EmployeeRepository;
 import com.gilad.employee_management.repository.UserSecurityRepository;
 
-@CrossOrigin
+@CrossOrigin(originPatterns = "*")
 @RestController
 @RequestMapping("/api/v1/")
 public class EmployeeController {
@@ -41,9 +41,9 @@ public class EmployeeController {
 		return employeeRepository.findAll();
 	}
 
-	@GetMapping("/getEmployee/{empId}")
-	public Optional<Employee> getAllEmployees(@PathVariable Long empId) {
-		return employeeRepository.findById(empId);
+	@GetMapping("/getEmployee/{email}")
+	public Optional<Employee> getEmployeeByEmail(@PathVariable String email) {
+		return employeeRepository.findByEmail(email);
 	}
 
 	@PostMapping("/addEmployee")
@@ -57,13 +57,18 @@ public class EmployeeController {
 	}
 
 	@PutMapping("/updateEmployee/{id}")
-	public ResponseEntity<Employee> updateEmployee(@PathVariable Long id,
+	public ResponseEntity<Employee> updateEmployee(@PathVariable String id,
 			@Valid @RequestBody Employee employeeDetails) {
-		Employee employee = employeeRepository.findById(id)
+		Employee employee = employeeRepository.findByEmail(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Employee with the id - " + id + " not exist"));
 		employee.setFirstName(employeeDetails.getFirstName());
 		employee.setLastName(employeeDetails.getLastName());
 		employee.setEmail(employeeDetails.getEmail());
+		employee.setPhone(employeeDetails.getPhone());
+		employee.setSupervisor(employeeDetails.getSupervisor());
+		employee.getAddress().setAddressLine1(employeeDetails.getAddress().getAddressLine1());
+		employee.getAddress().setAddressLine2(employeeDetails.getAddress().getAddressLine2());
+		employee.getAddress().setPostCode(employeeDetails.getAddress().getPostCode());
 		return ResponseEntity.ok(employeeRepository.save(employee));
 	}
 

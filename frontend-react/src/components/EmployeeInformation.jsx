@@ -4,8 +4,9 @@ import EmployeeService from "../services/EmployeeService";
 class EmployeeInformation extends Component {
     constructor(props) {
         super(props);
+        console.log(this.props);
 		 this.state={
-            id: this.props.match.params.id, // get the id param from the rout (from URL path)
+            id: this.props.match.params.email, // get the id param from the rout (from URL path)
             firstName:'',
             lastName:'',
             email:''
