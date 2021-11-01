@@ -9,13 +9,27 @@ class EmployeeInformation extends Component {
             id: this.props.match.params.email, // get the id param from the rout (from URL path)
             firstName:'',
             lastName:'',
-            email:''
+            phone: '',
+            supervisor: '',
+            email:'',
+            addressLine1: '',
+            addressLine2: '',
+            postCode: ''
         };
     }
      componentDidMount() {
         EmployeeService.getEmployeeById(this.state.id).then(res=>{
             let employee = res.data;
-            this.setState({firstName: employee.firstName, lastName:employee.lastName, email:employee.email});
+            this.setState({firstName: employee.firstName, 
+                           lastName:employee.lastName, 
+                              email:employee.email,
+                              phone: employee.phone, 
+                         supervisor: employee.supervisor,
+                         addressLine1:employee.address.addressLine1,
+                        addressLine2:employee.address.addressLine2,
+                          postCode:employee.address.postCode
+
+      });
         }) }
 
     logOff(id){
@@ -39,22 +53,31 @@ class EmployeeInformation extends Component {
                                     <div className={"form-group"}>
                                         <label> Last Name: </label>
                                         <input className={"form-control"} placeholder={"Last Name"} name={"lastName"}
-                                               value={this.state.lastName} onChange={this.changeLastNameHandler}/>
+                                               value={this.state.lastName} />
                                     </div>
                                     <div className={"form-group"}>
-                                        <label> Contact:  </label>
-                                        <input className={"form-control"} placeholder={"Contact"} name={"contact"}
-                                               value={this.state.contact} onChange={this.changeContactHandler}/>
+                                        <label> phone:  </label>
+                                        <input className={"form-control"} placeholder={"phone"} name={"phone"}
+                                               value={this.state.phone} />
                                     </div>
                                     <div className={"form-group"}>
-                                        <label> Role:  </label>
-                                        <input className={"form-control"} placeholder={"Role"} name={"role"}
-                                               value={this.state.role} onChange={this.changeRoleHandler}/>
+                                        <label> Supervisor:  </label>
+                                        <input className={"form-control"} placeholder={"supervisor"} name={"supervisor"}
+                                               value={this.state.supervisor} />
                                     </div>
                                     <div className={"form-group"}>
                                         <label> Email: </label>
                                         <input className={"form-control"} placeholder={"Email"} name={"email"}
-                                               value={this.state.email} onChange={this.changeEmailHandler}/>
+                                               value={this.state.email} />
+                                    </div>
+                                       <div className={"form-group"}>
+                                        <label> Address: </label>
+                                        <input className={"form-control"}
+                                            value={this.state.addressLine1}  />
+                                        <input className={"form-control"}
+                                            value={this.state.addressLine2}  />
+                                        <input className={"form-control"}
+                                            value={this.state.postCode}  />
                                     </div>
                                  <button className={"btn btn-info"} onClick={() => this.logOff()}>LOGOFF</button>
                                  </form>
