@@ -19,10 +19,10 @@ class LoginComponent extends Component {
 				if (Object.keys(res.data).length === 0 || employee.password !== this.state.password) {
 					this.setState({ message: "Invalid Credentials !!" });
 				} else if (employee.role === "admin") {
-						this.props.history.push("/admin");
-					} else if (employee.role === "employee") {
-						this.props.history.push(`/view-employee-information/${employee.email}`);
-					}
+					this.props.history.push("/admin");
+				} else if (employee.role === "employee") {
+					this.props.history.push(`/view-employee-information/${employee.email}`);
+				}
 			});
 		} else {
 			this.setState({ message: "Username/Password cannot be blank!!" });
@@ -40,10 +40,10 @@ class LoginComponent extends Component {
 						<div className={"card col-md-6 offset-md-3 offset-md-3"}>
 							<h3 className={"text-center"}>Login Information</h3>
 							<div className={"card-body"}>
-								<form>
+								<form onSubmit={this.login}>
 									<div className={"form-group"}>
-										<label className={"col-sm-3 remove-left"}> Username: </label>
-										<input
+										<label for='username' className={"col-sm-3 remove-left"}> Username: </label>
+										<input id='username'
 											className={"col-sm-9 "}
 											placeholder={"Please Enter Username"}
 											value={this.state.userName}
@@ -52,8 +52,8 @@ class LoginComponent extends Component {
 										/>
 									</div>
 									<div className={"form-group"}>
-										<label className={"col-sm-3 remove-left"}> Password: </label>
-										<input
+										<label for="password" className={"col-sm-3 remove-left"}> Password: </label>
+										<input id='password'
 											className={"col-sm-9"}
 											placeholder={"Please Enter Password"}
 											type="password"
@@ -64,8 +64,7 @@ class LoginComponent extends Component {
 									</div>
 
 									<button type="submit"
-										className={"btn btn-success"}
-										onClick={this.login} >Login</button>
+										className={"btn btn-success"}>Login</button>
 									<button type="" className={"btn btn-danger ml-2"} >Clear</button>
 									<label className={"error-message"}>{this.state.message}</label>
 								</form>
