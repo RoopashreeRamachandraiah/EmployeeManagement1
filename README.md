@@ -4,7 +4,7 @@ Server side - Spring Boot
 
 Client side - React
 
-Database - H2 
+Database - My SQL
 
 #### Instructions for run the application:
 * Run the spring boot server.
