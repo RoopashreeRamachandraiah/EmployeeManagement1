@@ -16,7 +16,7 @@ class LoginComponent extends Component {
 		if (this.state.userName.trim() !== "" && this.state.password.trim() !== "") {
 			EmployeeService.getEmployeeAuth(this.state.userName).then(res => {
 				let employee = JSON.parse(JSON.stringify(res.data));
-				if (Object.keys(res.data).length === 0 || employee.password !== this.state.password) {
+				if (!employee||Object.keys(res.data).length === 0 || employee.password !== this.state.password) {
 					this.setState({ message: "Invalid Credentials !!" });
 				} else if (employee.role === "admin") {
 					this.props.history.push("/admin");
@@ -30,6 +30,13 @@ class LoginComponent extends Component {
 
 		//this.props.history.push("/admin");
 	}
+	const clear=(event)=>{
+	this.setState({
+	userName:'',
+	password:'',
+	message:''
+	});
+	}
 
 
 	render() {
@@ -40,7 +47,7 @@ class LoginComponent extends Component {
 						<div className={"card col-md-6 offset-md-3 offset-md-3"}>
 							<h3 className={"text-center"}>Login Information</h3>
 							<div className={"card-body"}>
-								<form onSubmit={this.login}>
+								<form>
 									<div className={"form-group"}>
 										<label for='username' className={"col-sm-3 remove-left"}> Username: </label>
 										<input id='username'
@@ -64,8 +71,8 @@ class LoginComponent extends Component {
 									</div>
 
 									<button type="submit"
-										className={"btn btn-success"}>Login</button>
-									<button type="" className={"btn btn-danger ml-2"} >Clear</button>
+										className={"btn btn-success"} onClick={this.login}>Login</button>
+									<button type="" className={"btn btn-danger ml-2"} onClick={this.clear} >Clear</button>
 									<label className={"error-message"}>{this.state.message}</label>
 								</form>
 							</div>

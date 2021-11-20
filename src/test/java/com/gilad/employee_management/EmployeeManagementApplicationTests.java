@@ -1,6 +1,8 @@
 package com.gilad.employee_management;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -13,8 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gilad.employee_management.model.Address;
 import com.gilad.employee_management.model.Employee;
 import com.gilad.employee_management.model.UserAuthentication;
@@ -67,9 +71,38 @@ class EmployeeManagementApplicationTests {
 
 	}
 
+	@Test
+	void test_createEmployee() throws Exception {
+		Employee employee = returnEmployeeList();
+
+		Mockito.when(employeeRepository.save(employee)).thenReturn(employee);
+		mvc.perform(post("/api/v1/addEmployee").contentType(MediaType.APPLICATION_JSON)
+				.content(new ObjectMapper().writeValueAsString(employee))).andExpect(status().isOk());
+
+	}
+
+	@Test
+	void test_updateEmployee() throws Exception {
+		Employee employee = returnEmployeeList();
+		Mockito.when(employeeRepository.findByEmail("abc@something.com")).thenReturn(Optional.of(employee));
+		Mockito.when(employeeRepository.save(employee)).thenReturn(employee);
+		mvc.perform(post("/api/v1/updateEmployee/{id}", "abc@something.com").contentType(MediaType.APPLICATION_JSON)
+				.content(new ObjectMapper().writeValueAsString(employee))).andExpect(status().isOk());
+
+	}
+
+	@Test
+	void test_deleteEmployee() throws Exception {
+		Employee employee = returnEmployeeList();
+		Mockito.when(employeeRepository.findById((long) 1)).thenReturn(Optional.of(employee));
+		mvc.perform(delete("/api/v1/deleteEmployee/{id}", (long) 1)).andExpect(status().isOk());
+
+	}
+
 	private Employee returnEmployeeList() {
 		Employee employee = new Employee();
 		employee.setFirstName("abc");
+		employee.setLastName("xyz");
 		employee.setEmail("abc@something.com");
 		employee.setPhone("123456789");
 		Address address = new Address();

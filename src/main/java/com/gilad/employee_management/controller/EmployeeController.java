@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,7 +24,7 @@ import com.gilad.employee_management.model.UserAuthentication;
 import com.gilad.employee_management.repository.EmployeeRepository;
 import com.gilad.employee_management.repository.UserSecurityRepository;
 
-@CrossOrigin(originPatterns = "*")
+@CrossOrigin()
 @RestController
 @RequestMapping("/api/v1/")
 public class EmployeeController {
@@ -48,7 +47,7 @@ public class EmployeeController {
 
 	@PostMapping("/addEmployee")
 	public ResponseEntity<@Valid Employee> createEmployee(@Valid @RequestBody Employee employee) {
-		return ResponseEntity.ok(employeeRepository.save(employeeRepository.save(employee)));
+		return ResponseEntity.ok(employeeRepository.save(employee));
 	}
 
 	@GetMapping("/userAuthentication/{emailId}")
@@ -56,9 +55,10 @@ public class EmployeeController {
 		return securityRepository.findById(emailId);
 	}
 
-	@PutMapping("/updateEmployee/{id}")
+	@PostMapping("/updateEmployee/{id}")
 	public ResponseEntity<Employee> updateEmployee(@PathVariable String id,
 			@Valid @RequestBody Employee employeeDetails) {
+
 		Employee employee = employeeRepository.findByEmail(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Employee with the id - " + id + " not exist"));
 		employee.setFirstName(employeeDetails.getFirstName());
@@ -69,6 +69,7 @@ public class EmployeeController {
 		employee.getAddress().setAddressLine1(employeeDetails.getAddress().getAddressLine1());
 		employee.getAddress().setAddressLine2(employeeDetails.getAddress().getAddressLine2());
 		employee.getAddress().setPostCode(employeeDetails.getAddress().getPostCode());
+
 		return ResponseEntity.ok(employeeRepository.save(employee));
 	}
 
