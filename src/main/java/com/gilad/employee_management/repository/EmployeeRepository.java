@@ -1,9 +1,14 @@
 package com.gilad.employee_management.repository;
 
-import com.gilad.employee_management.model.Employee;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import com.gilad.employee_management.model.Employee;
+
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
+
+	Optional<Employee> findByEmail(String email);
 }

@@ -14,8 +14,12 @@ class ListEmployeesComponent extends Component {
     }
 
     componentDidMount() {
-        EmployeeService.getEmployees().then((res)=>
-            this.setState({employees:res.data}))
+        console.log('in side component mount');
+        EmployeeService.getEmployees().then((res)=>{
+            console.log(res)
+            this.setState({employees:res.data})
+        })
+            
     }
 
     addEmployee(){
@@ -23,7 +27,7 @@ class ListEmployeesComponent extends Component {
     }
 
     updateEmployee(id) {
-        this.props.history.push(`/view-employee/${id}`);
+        this.props.history.push(`/update-employee/${id}`);
     }
 
     deleteEmployee(id){
@@ -63,11 +67,11 @@ class ListEmployeesComponent extends Component {
                                 employee =>
                                 <tr key={employee.id}>
                                     <td>{employee.id}</td>
-									<td>{employee.first_name}</td>
-                                    <td>{employee.last_name}</td>
-                                    <td>{employee.email_id}</td>
+									<td>{employee.firstName}</td>
+                                    <td>{employee.lastName}</td>
+                                    <td>{employee.email}</td>
                                     <td>
-                                        <button className={"btn btn-info"} onClick={() => this.updateEmployee(employee.id)}>Update/View details</button>
+                                        <button className={"btn btn-info"} onClick={() => this.updateEmployee(employee.email)}>Update/View details</button>
                                         <button className={"btn btn-danger ml-2"} onClick={() => this.deleteEmployee(employee.id)}>Delete</button>
 										
                                     </td>

@@ -1,28 +1,33 @@
 import axios from 'axios'
 
-const EMPLOYEE_API_BASE_URL = 'http://localhost:8080/api/v1/employees';
+const EMPLOYEE_API_BASE_URL = 'http://localhost:8080/api/v1/';
 
 class EmployeeService {
 
-    getEmployees(){
-        return axios.get(EMPLOYEE_API_BASE_URL);
+    getEmployees() {
+        console.log('inside getEmployees');
+        return axios.get(EMPLOYEE_API_BASE_URL.concat("getAllEmployees"));
     }
 
-    createEmployee(employee){
-        return axios.post(EMPLOYEE_API_BASE_URL, employee);
+    getEmployeeAuth(emailId) {
+        return axios.get(EMPLOYEE_API_BASE_URL.concat(`userAuthentication/${emailId}`));
     }
 
-    getEmployeeById(emailid){
-        return axios.get(EMPLOYEE_API_BASE_URL+`/${emailid}`);
+    createEmployee(employee) {
+        return axios.post(EMPLOYEE_API_BASE_URL.concat("addEmployee"), employee);
     }
 
-    updateEmployee(id, employee){
-        return axios.put(EMPLOYEE_API_BASE_URL+`/${id}`, employee);
+    getEmployeeById(emailid) {
+        return axios.get(EMPLOYEE_API_BASE_URL.concat(`getEmployee/${emailid}`));
     }
 
-    deleteEmployee(id){
-        return axios.delete(EMPLOYEE_API_BASE_URL+`/${id}`);
-    }
+    updateEmployee(id, employee) {
+        return axios.post(EMPLOYEE_API_BASE_URL.concat(`updateEmployee/${id}`),employee)
 }
 
-export default  new EmployeeService();
+deleteEmployee(id){
+    return axios.delete(EMPLOYEE_API_BASE_URL.concat(`deleteEmployee/${id}`));
+}
+}
+
+export default new EmployeeService();

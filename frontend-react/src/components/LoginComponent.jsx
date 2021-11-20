@@ -14,16 +14,14 @@ class LoginComponent extends Component {
 	login = (event) => {
 		event.preventDefault();
 		if (this.state.userName.trim() !== "" && this.state.password.trim() !== "") {
-			EmployeeService.getEmployeeById(this.state.userName, this.state.password).then(res => {
+			EmployeeService.getEmployeeAuth(this.state.userName).then(res => {
 				let employee = JSON.parse(JSON.stringify(res.data));
-				if (Object.keys(res.data).length === 0 || employee.password !== this.state.password) {
+				if (!employee||Object.keys(res.data).length === 0 || employee.password !== this.state.password) {
 					this.setState({ message: "Invalid Credentials !!" });
-				} else {
-					if (employee.role === "admin") {
-						this.props.history.push("/admin");
-					} else if (employee.role === "employee") {
-						this.props.history.push("/view-employee-information");
-					}
+				} else if (employee.role === "admin") {
+					this.props.history.push("/admin");
+				} else if (employee.role === "employee") {
+					this.props.history.push(`/view-employee-information/${employee.email}`);
 				}
 			});
 		} else {
@@ -31,6 +29,13 @@ class LoginComponent extends Component {
 		}
 
 		//this.props.history.push("/admin");
+	}
+	const clear=(event)=>{
+	this.setState({
+	userName:'',
+	password:'',
+	message:''
+	});
 	}
 
 
@@ -44,8 +49,8 @@ class LoginComponent extends Component {
 							<div className={"card-body"}>
 								<form>
 									<div className={"form-group"}>
-										<label className={"col-sm-3 remove-left"}> Username: </label>
-										<input
+										<label for='username' className={"col-sm-3 remove-left"}> Username: </label>
+										<input id='username'
 											className={"col-sm-9 "}
 											placeholder={"Please Enter Username"}
 											value={this.state.userName}
@@ -54,8 +59,8 @@ class LoginComponent extends Component {
 										/>
 									</div>
 									<div className={"form-group"}>
-										<label className={"col-sm-3 remove-left"}> Password: </label>
-										<input
+										<label for="password" className={"col-sm-3 remove-left"}> Password: </label>
+										<input id='password'
 											className={"col-sm-9"}
 											placeholder={"Please Enter Password"}
 											type="password"
@@ -66,9 +71,8 @@ class LoginComponent extends Component {
 									</div>
 
 									<button type="submit"
-										className={"btn btn-success"}
-										onClick={this.login} >Login</button>
-									<button type="" className={"btn btn-danger ml-2"} >Clear</button>
+										className={"btn btn-success"} onClick={this.login}>Login</button>
+									<button type="" className={"btn btn-danger ml-2"} onClick={this.clear} >Clear</button>
 									<label className={"error-message"}>{this.state.message}</label>
 								</form>
 							</div>
