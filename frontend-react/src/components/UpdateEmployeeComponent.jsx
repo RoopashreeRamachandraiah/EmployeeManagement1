@@ -44,6 +44,7 @@ class UpdateEmployeeComponent extends Component {
             contact: this.state.contact,
             email: this.state.email,
             phone: this.state.phone,
+            supervisor: this.state.supervisor,
             address: {
                 addressLine1: this.state.addressLine1,
                 addressLine2: this.state.addressLine2,
